@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>asasd</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div class="frame" id="app">
+      <div class="group">
+        <div class="rectangle"></div>
+        <div class="img" :class="imgAnimationClass">
+            <img :src="ammoUrl" >
+        </div>
+        <div class="nickname" :class="whoAnimationClass">{{shownWinner}}</div>
+        <div class="skin" :class="whatAnimationClass" >{{shownPrize}}</div>
+        <div class="gets">ПОЛУЧАЕТ</div>
+        <div class="tag">от REDROSES11111</div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    let app = Vue.createApp({
+      data() {
+        return {
+          ammoUrl: "#",
+          winner: "qwe",
+          what: "nothing",
+          animaionState: "",
+          data: {},
+          answer: false,
+          //   whoAnimationClass: 'who-animation',
+          // imgAnimationClass: 'img-animation',
+          // whatAnimationClass: 'what-animation'
+        };
+      },
+      methods: {
+        updateData() {
+          fetch("http://178.154.224.215:8082/raffle/getWinner")
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              //   if (JSON.stringify(data) === JSON.stringify(this.data)) return
+              //   console.log(data);
+              this.animaionState = "forward";
+              this.winner = data.botFollower.username.toUpperCase();
+              this.what = data.prize.nameOfPrize;
+              this.ammoUrl = data.prize.urlToPng;
+              this.data = JSON.parse(JSON.stringify(data));
+            });
+        },
+        checkData() {
+          fetch("http://178.154.224.215:8082/raffle/getWinner")
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              if (JSON.stringify(this.data) === JSON.stringify(data)) {
+                this.answer = false;
+              } else {
+                console.log("back");
+                this.animaionState = "back";
+
+                // this.animaionState = "";
+                this.winner = data.botFollower.username.toUpperCase();
+                this.what = data.prize.nameOfPrize;
+                this.ammoUrl = data.prize.urlToPng;
+                this.data = JSON.parse(JSON.stringify(data));
+                console.log("forward");
+                setTimeout(() => {
+                  this.animaionState = "invisible";
+                  setTimeout(() => {
+                    this.animaionState = "forward";
+                  }, 2);
+                }, 3000);
+              }
+            });
+        },
+      },
+      computed: {
+        imgShown() {
+          return this.ammoUrl === "#" ? false : true;
+        },
+        shownWinner() {
+          return this.winner === "qwe" ? "NOBODY" : this.winner;
+        },
+        shownPrize() {
+          return this.what === "nothing" ? "NOTHING" : this.what;
+        },
+        whoAnimationClass() {
+          // return this.animaionState === "forward" ? "who-animation" : "who-animation-revese";
+          if (this.animaionState === "forward") return "who-animation";
+          if (this.animaionState === "back") return "who-animation-revese";
+          if (this.animaionState === "invisible") return "invisible";
+          return "";
+        },
+        imgAnimationClass() {
+          // return this.animaionState === "forward" ? "who-animation" : "who-animation-revese";
+          if (this.animaionState === "forward") return "img-animation";
+          if (this.animaionState === "back") return "img-animation-revese";
+          if (this.animaionState === "invisible") return "invisible";
+          return "";
+        },
+        whatAnimationClass() {
+          // return this.animaionState === "forward" ? "who-animation" : "who-animation-revese";
+          if (this.animaionState === "forward") return "what-animation";
+          if (this.animaionState === "back") return "what-animation-revese";
+          if (this.animaionState === "invisible") return "invisible";
+          return "";
+        },
+        // imgAnimationClass
+        // whatAnimationClass
+      },
+      mounted() {
+        this.animaionState = "invisible";
+
+        this.updateData();
+        
+
+        setInterval(() => {
+          this.checkData();
+          this.animaionState = "";
+        },60000);
+      },
+    });
+
+    app.mount("#app");
+  </script>
+  
+  <style>
+    /* Frame 6 */
+    body {
+      background-color: transparent;
+    }
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap");
+    img {
+        width: 100%;
+        position: absolute;
+      width: 385.81px;
+      /* height: 384.2px; */
+      /* left: 214.55px; */
+      top: 110px;
+      transform: rotate(16.26deg);
+    }
+    .frame {
+      position: relative;
+      width: 572px;
+      height: 326px;
+      top: 68px;
+      background: #ffffff;
+    }
+
+    /* Group 1 */
+    .group {
+      position: absolute;
+      width: 584.94px;
+      height: 476.84px;
+      left: 0px;
+      top: -75px;
+    }
+
+    /* Rectangle 1 */
+    .rectangle {
+      position: absolute;
+      width: 550.5px;
+      height: 190px;
+      left: 0px;
+      top: 68px;
+
+      background: linear-gradient(262.42deg, #00ff85 10.18%, #0af0ff 120.22%),
+        #16f3a4;
+      border-radius: 17px;
+    }
+
+    .img {
+      position: absolute;
+      width: 385.81px;
+      height: 384.2px;
+      left: 214.55px;
+      top: -75px;
+
+
+
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+      
+    }
+
+    .nickname {
+      /* ЧЕЙТО ЕБАНЫЙ НИКНЕЙМ */
+
+      position: absolute;
+      width: 358px;
+      height: 29px;
+      left: 36px;
+      top: 139px;
+
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 29px;
+
+      -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: black;
+      text-shadow: -1px 3px 4px rgba(0, 0, 0, 0.35);
+    }
+    /* ДЛИННОЕ НАХУЙ НАЗВАНИЕСКИНА ЕБАНОГО СУКА */
+    .skin {
+      position: absolute;
+      width: 291px;
+      height: 44px;
+      left: 36px;
+      top: 170px;
+
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 22px;
+      /* text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 0.5px black; */
+
+      -webkit-text-fill-color: ffffff; /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: black;
+
+      color: #ffffff;
+
+      /* border: 1px solid rgba(0, 0, 0, 0.5); */
+    }
+    .gets {
+      /* ПОЛУЧАЕТ */
+
+      position: absolute;
+      width: 219px;
+      height: 44px;
+      left: 36px;
+      top: 93px;
+
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: 800;
+      font-size: 36px;
+      line-height: 44px;
+      /* identical to box height */
+
+      -webkit-text-fill-color: rgba(
+        2,
+        249,
+        161,
+        0.5
+      ); /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 2px;
+      -webkit-text-stroke-color: black;
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .tag {
+      /* ОТ REDROSES11111 */
+
+      position: absolute;
+      width: 171px;
+      height: 22px;
+      left: 36px;
+      top: 218px;
+
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 22px;
+      /* identical to box height */
+
+      -webkit-text-fill-color: firebrick; /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: black;
+
+      text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    .img-animation {
+      animation: img-slide 1s ease-in;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .who-animation {
+      animation: who-slide 1s ease-in;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .what-animation {
+      animation: what-slide 1s ease-in;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .img-animation-revese {
+      animation: img-slide 1s ease-in reverse;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .who-animation-revese {
+      animation: who-slide 1s ease-in reverse;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .what-animation-revese {
+      animation: what-slide 1s ease-in reverse;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .invisible {
+      opacity: 0;
+    }
+
+    @keyframes img-slide {
+      from {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+      80% {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0px);
+      }
+    }
+    @keyframes who-slide {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0px);
+      }
+    }
+    @keyframes what-slide {
+      from {
+        opacity: 0;
+        transform: translateY(-100px);
+      }
+      80% {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</html>
